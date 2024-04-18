@@ -1,4 +1,33 @@
 import tkinter as tk
+import psycopg2
+
+def fetch_config():
+    """Fetch configuration from PostgreSQL database."""
+    conn = psycopg2.connect(
+        host="your-endpoint",
+        database="calc_config",
+        user="your-username",
+        password="your-password"
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT config_key, config_value FROM config")
+    config_data = {row[0]: row[1] for row in cur.fetchall()}
+    cur.close()
+    conn.close()
+    return config_data
+
+config = fetch_config()
+
+LARGE_FONT_STYLE = (config['font_style'], int(config['font_size']), "bold")
+SMALL_FONT_STYLE = ("Arial", 16)
+DIGITS_FONT_STYLE = ("Arial", 24, "bold")
+DEFAULT_FONT_STYLE = ("Arial", 20)
+
+OFF_WHITE = config['bg_color']
+WHITE = "#FFFFFF"
+LIGHT_BLUE = "#CCEDFF"
+LIGHT_GRAY = "#F5F5F5"
+LABEL_COLOR = "#25265E"
 
 LARGE_FONT_STYLE = ("Arial", 40, "bold")
 SMALL_FONT_STYLE = ("Arial", 16)
